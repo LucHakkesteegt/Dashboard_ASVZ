@@ -55,10 +55,56 @@ body {
 
 .left-box {
     flex: 1;                   /* Takes 1 part */
-    background-color: red; /* Example color for left box */
+    background-color: white; /* Example color for left box */
 }
 
 .right-box {
     flex: 2;                   /* Takes 2 parts */
     background-color: #2196F3; /* Example color for right box */
+}
+.messages {
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 15px; /* Rounded corners for all corners */
+    padding: 20px; /* Padding inside the box */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 80%; /* Full width */
+    margin-top: 75px;
+    max-height: 700px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+.messages h2 {
+    color: black; /* Title color */
+    margin-bottom: 15px; /* Spacing below the title */
+    text-align: center; /* Center the title text */
+}
+
+.messages ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.message-item {
+    display: flex; /* Use Flexbox for alignment */
+    justify-content: space-between; /* Space out items to fill the width */
+    align-items: center; /* Center vertically */
+    color: black; /* Message text color */
+    padding: 10px; /* Padding around each message */
+    border-bottom: 1px solid #ccc; /* Divider line between messages */
+}
+
+.message-item:last-child {
+    border-bottom: none; /* Remove border from the last item */
+}
+
+.message-text {
+    flex: 1; /* Allow the message text to grow */
+}
+
+.message-time {
+    margin-left: 10px; /* Space between text and time */
+    color: grey; /* Optional: make the time text a different color */
+    font-size: 0.9em; /* Optional: adjust font size for the time */
 }

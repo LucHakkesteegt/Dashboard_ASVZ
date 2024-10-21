@@ -19,7 +19,21 @@
 
     <div class="container">
         <div class="box left-box">
-            Left Box (1/3)
+            <div class="messages">
+                <h2>Actions</h2>
+                @if ($messages->isEmpty())
+                    <p>No messages found.</p>
+                @else
+                    <ul>
+                        @foreach ($messages as $message)
+                            <li class="message-item">
+                                <span class="message-text">{{ $message->name }}</span>
+                                <span class="message-time">{{ $message->created_at->format('Y-m-d H:i') }}</span> <!-- Format as desired -->
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
         </div>
         <div class="box right-box">
             Right Box (2/3)
