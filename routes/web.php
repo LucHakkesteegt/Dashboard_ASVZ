@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
-
+use App\Http\Controllers\ChartController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,4 +14,6 @@ use App\Http\Controllers\MessageController;
 |
 */
 
+
+Route::get('/chart-data', [ChartController::class, 'fetchMessages']);
 Route::get('/', [MessageController::class, 'index']);
