@@ -118,15 +118,29 @@ body {
     font-size: 0.9em; /* Optional: adjust font size for the time */
 }
 .button-container {
-    display: flex;               /* Flexbox for button layout */
-    justify-content: center;     /* Center buttons */
-    margin-top: 10px;           /* Space above the buttons */
+    display: flex; /* Zorgt ervoor dat de knoppen naast elkaar staan */
+    justify-content: center; /* Centreert de knoppen horizontaal */
+    margin-top: 20px; /* Voeg wat ruimte boven de knoppen toe */
 }
 
 .button-container button {
-    margin: 0 5px;              /* Space between buttons */
-    padding: 10px 15px;         /* Padding inside buttons */
-    cursor: pointer;             /* Change cursor on hover */
+    background-color: #b0cc0c; /* Basis achtergrondkleur */
+    color: white; /* Tekstkleur wit */
+    border: none; /* Geen rand */
+    border-radius: 5px; /* Ronde hoeken */
+    padding: 10px 20px; /* Binnenruimte: 10px boven/onder en 20px links/rechts */
+    font-size: 16px; /* Grotere tekst voor betere leesbaarheid */
+    cursor: pointer; /* Wijzig de cursor naar pointer */
+    transition: background-color 0.3s, transform 0.3s; /* Zachte overgang voor achtergrondkleur en transform */
+    margin-right: 10px; /* Ruimte tussen de knoppen */
+    margin-left: 10px; /* Ruimte tussen de knoppen */
+}
+.button-container button:hover {
+    background-color: #98d453; /* Iets donkerder groen bij hover */
+    transform: scale(1.05); /* Vergroot de knop een beetje bij hover */
+}
+.button-container button:active {
+    transform: scale(0.95); /* Maak de knop kleiner wanneer deze is ingedrukt */
 }
 .ActivitiesChart {
     margin-right: 20px; /* Space on the right */
