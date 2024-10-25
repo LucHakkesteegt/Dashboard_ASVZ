@@ -62,10 +62,14 @@ body {
     flex: 1;                   /* Takes 1 part */
     background-color: white; /* Example color for left box */
 }
-
 .right-box {
-    flex: 2;                   /* Takes 2 parts */
-    background-color: white; /* Example color for right box */
+    flex: 2;                     /* Takes 2 parts */
+    background-color: white;     /* Background color for right box */
+    padding: 20px;               /* Padding around the box */
+    box-sizing: border-box;      /* Include padding in total width/height */
+    display: flex;               /* Flexbox for alignment */
+    flex-direction: column;      /* Stack children vertically */
+    align-items: center;         /* Center items horizontally */
 }
 .messages {
     background-color: #f0f0f0; /* Light grey background */
@@ -112,4 +116,20 @@ body {
     margin-left: 10px; /* Space between text and time */
     color: grey; /* Optional: make the time text a different color */
     font-size: 0.9em; /* Optional: adjust font size for the time */
+}
+.button-container {
+    display: flex;               /* Flexbox for button layout */
+    justify-content: center;     /* Center buttons */
+    margin-top: 10px;           /* Space above the buttons */
+}
+
+.button-container button {
+    margin: 0 5px;              /* Space between buttons */
+    padding: 10px 15px;         /* Padding inside buttons */
+    cursor: pointer;             /* Change cursor on hover */
+}
+.ActivitiesChart {
+    margin-right: 20px; /* Space on the right */
+    margin-left: 20px; /* Space on the left */
+    margin-top: 20px; /* Space on the top */
 }

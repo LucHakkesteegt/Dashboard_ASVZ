@@ -1,37 +1,47 @@
 <?php
-// app/Http/Controllers/ChartController.php
 
 namespace App\Http\Controllers;
 
-use App\Models\Message; // Zorg ervoor dat je de Message model importeert
-use Carbon\Carbon; // Zorg ervoor dat je Carbon importeert voor datum handling
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Models\Message;
+use Illuminate\Routing\Controller;
 
 class ChartController extends Controller
 {
-    public function fetchMessages(): JsonResponse
+    public function fetchMessages(Request $request): JsonResponse
     {
-        // Haal de start- en einddatum van de huidige week
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
+        $weekShift = $request->query('weekShift', 0);
+        Log::info("Week Shift: " . $weekShift);
 
-        // Haal berichten op, gegroepeerd per datum
-        $messagesPerDay = Message::whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+        // Check that weekShift is being processed correctly
+        try {
+            $startOfWeek = Carbon::now()->startOfWeek()->addWeeks($weekShift);
+            $endOfWeek = Carbon::now()->endOfWeek()->addWeeks($weekShift);
 
-        // Voorbereiden van labels en counts
-        $dates = [];
-        $counts = [];
+            // Continue with message query logic
+            $messagesPerDay = Message::whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
 
-        for ($date = $startOfWeek->copy(); $date <= $endOfWeek; $date->addDay()) {
-            $formattedDate = $date->format('Y-m-d');
-            $dates[] = $formattedDate;
-            $counts[] = $messagesPerDay->where('date', $formattedDate)->first()->count ?? 0; // Default to 0
+            // Rest of your function
+            $dates = [];
+            $counts = [];
+            for ($date = $startOfWeek->copy(); $date <= $endOfWeek; $date->addDay()) {
+                $formattedDate = $date->format('Y-m-d');
+                $dates[] = $formattedDate;
+                $counts[] = $messagesPerDay->where('date', $formattedDate)->first()->count ?? 0;
+            }
+
+            return response()->json(['labels' => $dates, 'counts' => $counts]);
+
+        } catch (\Exception $e) {
+            Log::error("Error in fetchMessages: " . $e->getMessage());
+            return response()->json(['error' => 'An error occurred'], 500);
         }
-
-        return response()->json(['labels' => $dates, 'counts' => $counts]);
     }
 }

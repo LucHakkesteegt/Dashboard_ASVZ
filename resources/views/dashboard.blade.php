@@ -41,43 +41,55 @@
             </div>
         </div>
         <div class="box right-box">
-            <canvas id="myChart" class="ActivitiesChart"></canvas>
+            <canvas id="myChart" class="ActivitiesChart" width="80" height="40"></canvas>
+            <div class="button-container"> <!-- Container for the buttons -->
+                <button id="prevWeekBtn">Previous Week</button>
+                <button id="nextWeekBtn">Next Week</button>
+            </div>
         </div>
     </div>
 
     <script>
+        let weekShift = 0; // Variabele om de week te verschuiven
+        let myChart; // Variabele om de chart instance op te slaan
+
         // Functie om gegevens op te halen
         function fetchMessages() {
-            // Hier gebruik je de juiste endpoint om de data op te halen
-            fetch('/chart-data') 
-                .then(response => response.json())
-                .then(data => {
-                    // Initialiseer de Chart met de opgehaalde data
-                    const ctx = document.getElementById('myChart').getContext('2d');
-                    const myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
+            fetch(`/chart-data?weekShift=${weekShift}`) // Haal gegevens op van de route /chart-data 
+                .then(response => response.json()) // Zet de response om naar JSON format
+                .then(data => { // Gebruik de data om een grafiek te maken
+                    const ctx = document.getElementById('myChart').getContext('2d'); // Selecteer de canvas om de grafiek in te tekenen
+                    
+                    // Als er al een chart bestaat, vernietig deze
+                    if (myChart) {
+                        myChart.destroy(); // Vernietig de bestaande chart
+                    }
+
+                    // Maak een nieuwe Chart
+                    myChart = new Chart(ctx, { // Maak een nieuwe Chart
+                        type: 'bar', // Type grafiek
+                        data: { // Data voor de grafiek
                             labels: data.labels, // Data labels
-                            datasets: [{
-                                label: 'Messages per Day',
-                                data: data.counts, // Data counts
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            datasets: [{ 
+                                label: 'Messages per Day', // Legenda
+                                data: data.counts, // Data waarden
+                                backgroundColor: '#b0cc0c',
                                 borderColor: 'rgba(75, 192, 192, 1)',
                                 borderWidth: 1,
-                                hoverBackgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                hoverBackgroundColor: '#def758',
                                 hoverBorderColor: 'rgba(255, 159, 64, 1)',
                             }]
                         },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Number of Messages'
+                        options: { // Opties voor de grafiek
+                            scales: { // Schalen
+                                y: { // Y-as
+                                    beginAtZero: true, // Begin bij 0
+                                    title: { 
+                                        display: true, 
+                                        text: 'Number of Messages' 
                                     }
                                 },
-                                x: {
+                                x: { // X-as
                                     title: {
                                         display: true,
                                         text: 'Dates'
@@ -85,19 +97,19 @@
                                 }
                             },
                             plugins: {
-                                legend: {
+                                legend: { // Legenda instellingen
                                     display: true,
                                     position: 'top'
                                 },
                                 tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            let label = context.dataset.label || '';
-                                            if (label) {
-                                                label += ': ';
+                                    callbacks: { // Tooltip instellingen
+                                        label: function(context) { // Functie om de tooltip te tonen
+                                            let label = context.dataset.label || ''; // Laat legenda zien in de tooltip
+                                            if (label) { // Als er een legenda is
+                                                label += ': '; // Voeg dubbele punt toe
                                             }
                                             label += context.parsed.y; // Laat y-waarde zien in de tooltip
-                                            return label;
+                                            return label; // Geef de tooltip terug
                                         }
                                     }
                                 }
@@ -105,11 +117,22 @@
                         }
                     });
                 })
-                .catch(error => console.error('Error fetching chart data:', error));
-        }
+                .catch(error => console.error('Error fetching chart data:', error)); // Toon een error als het ophalen van gegevens mislukt
+            }
 
-        // Roep de functie op om gegevens te laden bij het laden van de pagina
-        document.addEventListener('DOMContentLoaded', fetchMessages);
+            // Event listeners voor de knoppen
+            document.getElementById('prevWeekBtn').addEventListener('click', function() {
+                weekShift -= 1; // Verschuif de week naar vorige week
+                fetchMessages(); // Haal de gegevens opnieuw op
+            });
+
+            document.getElementById('nextWeekBtn').addEventListener('click', function() {
+                weekShift += 1; // Verschuif de week naar volgende week
+                fetchMessages(); // Haal de gegevens opnieuw op
+            });
+
+            // Roep de functie op om gegevens te laden bij het laden van de pagina
+            document.addEventListener('DOMContentLoaded', fetchMessages); 
     </script>
 </body>
 </html>
