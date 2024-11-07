@@ -147,3 +147,6 @@ body {
     margin-left: 20px; /* Space on the left */
     margin-top: 20px; /* Space on the top */
 }
+.icon-space {
+    margin-right: 8px; /* Adjust the value to control the spacing */
+}

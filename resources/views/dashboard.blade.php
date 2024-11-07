@@ -6,6 +6,7 @@
     <title>DashBoard ASVZ</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header class="header">
@@ -27,13 +28,15 @@
                 @else
                     <ul>
                         <li class="message-item">
-                            <span class="message-text">Sondepomp:</span>
-                            <span class="message-time" style="color: black;">Tijd</span>
+                            <span class="message-text" style="font-weight: bold;">Sondepomp:</span>
+                            <span class="message-time" style="color: black; font-weight: bold;">Tijd:</span>
                         </li>
                         @foreach ($messages as $message)
                             <li class="message-item">
+                                <i class="fas fa-tools icon-space"></i>
                                 <span class="message-text">{{ $message->name }}</span>
-                                <span class="message-time">{{ $message->created_at->format('Y-m-d H:i') }}</span>
+                                <!-- Pass the date in ISO format to JavaScript as a data attribute -->
+                                <span class="message-time" data-date="{{ $message->created_at }}">{{ $message->created_at->format('Y-m-d H:i') }}</span>
                             </li>
                         @endforeach
                     </ul>
@@ -133,6 +136,28 @@
 
             // Roep de functie op om gegevens te laden bij het laden van de pagina
             document.addEventListener('DOMContentLoaded', fetchMessages); 
+
+            document.addEventListener('DOMContentLoaded', () => {
+                // Selecteer alle elementen met de 'data-date' attribuut
+                const dateElements = document.querySelectorAll('.message-time[data-date]');
+                
+                dateElements.forEach(element => {
+                    // Haal de ruwe datum op uit het data attribuut
+                    const date = new Date(element.getAttribute('data-date'));
+                    
+                    // Formatteer de datum in het Nederlands
+                    const formattedDate = date.toLocaleString('nl-NL', {
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric', 
+                        hour: '2-digit', 
+                        minute: '2-digit'
+                    });
+
+                    // Update de tekstinhoud van het element met de geformatteerde datum
+                    element.textContent = formattedDate;
+                });
+            });
     </script>
 </body>
 </html>
