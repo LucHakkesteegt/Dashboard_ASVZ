@@ -15,6 +15,10 @@ use App\Http\Controllers\ChartController;
 */
 
 
-Route::get('/chart-data', [ChartController::class, 'fetchMessages']); // Nieuwe route voor het ophalen van de data voor de chart op de dashboard pagina
+Route::middleware('throttle:60,1')->group(function () {
+    // Route voor het ophalen van de data voor de chart op de dashboard pagina
+    Route::get('/chart-data', [ChartController::class, 'fetchMessages']);
 
-Route::get('/', [MessageController::class, 'index']); // route om de dashboard pagina te tonen bij het opstarten van de applicatie
+    // Route om de dashboard pagina te tonen bij het opstarten van de applicatie
+    Route::get('/', [MessageController::class, 'index']);
+});
