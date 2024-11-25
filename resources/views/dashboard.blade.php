@@ -16,9 +16,15 @@
         <div class="header-box text-box">
             <div class="header-text">Dashboard</div>
         </div>
-        <div class="header-box empty-box"></div>
+        <div class="header-box logout-box">
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="btn btn-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </div>
     </header>
-
     <div class="container">
         <div class="box left-box">
             <div class="messages">

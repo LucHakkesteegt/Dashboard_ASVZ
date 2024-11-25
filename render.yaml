@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: LaravelApp
+    env: php
+    buildCommand: |
+      composer install
+      php artisan key:generate
+      php artisan migrate --force
+      npm install
+      npm run prod
+    startCommand: php artisan serve --host 127.0.0.1 --port 3306
