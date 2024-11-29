@@ -35,7 +35,10 @@ Route::get('register', function () {
     return view('auth.register');
 })->name('register');
 
-Route::get('/chart-data', [ChartController::class, 'fetchMessages'])->middleware('auth');
-
+Route::get('/chart-data', [ChartController::class, 'fetchMessages']); // Nieuwe route voor het ophalen van de data voor de chart op de dashboard pagina
+Route::middleware('throttle:60,1')->group(function () {
+    // Route voor het ophalen van de data voor de chart op de dashboard pagina
+    Route::get('/chart-data', [ChartController::class, 'fetchMessages']);
+});
 
 require __DIR__.'/auth.php';
